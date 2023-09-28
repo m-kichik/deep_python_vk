@@ -3,7 +3,7 @@ from io import StringIO
 from keyword_search import fopen, words_in_line, search_word_in_line
 
 
-class TestFileOperations(unittest.TestCase):
+class TestKeyWordSearch(unittest.TestCase):
     def test_fopen_with_file(self):
         with self.subTest("Test fopen for reading with file"):
             with fopen("test_file.txt", "r") as file:
