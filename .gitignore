@@ -1,3 +1,6 @@
 /test.py
 01/alice_3G.txt
 01/coverage_report.txt
+02/count_calls_class.py
+02/__pycache__
+02/.coverage

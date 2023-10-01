@@ -18,8 +18,8 @@ def mean(count: int = 10):
             mean_time = sum(execution_times) / len(execution_times)
 
             print(
-                f'Mean time of executing last {len(execution_times)}' +
-                f'calls of {function.__name__} is {mean_time:.3e} s.'
+                f"Mean time of executing last {len(execution_times)} "
+                + f"calls of {function.__name__} is {mean_time:.6e} s."
             )
             return result
 
@@ -28,11 +28,12 @@ def mean(count: int = 10):
     return decorator_mean
 
 
-@mean()
-def add_one(value: int) -> int:
-    return value + 1
+def sleep_1s() -> None:
+    time.sleep(1.0)
 
 
 if __name__ == "__main__":
-    for i in range(20):
-        add_one(1)
+    mean_sleep_1s = mean(10)(sleep_1s)
+
+    for _ in range(10):
+        mean_sleep_1s()
