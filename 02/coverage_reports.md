@@ -2,8 +2,8 @@
 | Name               | Stmts | Miss | Cover | Missing |
 |--------------------|-------|------|-------|---------|
 | parse_json.py      | 18    | 4    | 78%   | 26-30   |
-| test_parse_json.py | 60    | 0    | 100%  |         |
-| TOTAL              | 78    | 4    | 95%   |         |
+| test_parse_json.py | 55    | 0    | 100%  |         |
+| TOTAL              | 73    | 4    | 95%   |         |
 **Task 2**:
 | Name                     | Stmts | Miss | Cover | Missing |
 |--------------------------|-------|------|-------|---------|

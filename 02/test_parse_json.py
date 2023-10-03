@@ -42,8 +42,7 @@ class TestParseJSON(unittest.TestCase):
             parse_json(
                 json_str, keywords=keywords, keyword_callback=mock_custom_callback
             )
-            calls = mock_custom_callback.call_args_list
-            self.assertFalse(calls)
+            mock_custom_callback.assert_not_called()
 
         with self.subTest("Test parse_json without keywords"):
             mock_custom_callback = Mock()
@@ -52,8 +51,7 @@ class TestParseJSON(unittest.TestCase):
                 required_fields=required_fields,
                 keyword_callback=mock_custom_callback,
             )
-            calls = mock_custom_callback.call_args_list
-            self.assertFalse(calls)
+            mock_custom_callback.assert_not_called()
 
         with self.subTest("Test parse_json with no matched kw-w"):
             json_str = '{"k1": "w1 w2", "k2": "w2 w3", "k3": "w3 w4"}'
@@ -66,8 +64,7 @@ class TestParseJSON(unittest.TestCase):
                 keywords=keywords,
                 keyword_callback=mock_custom_callback,
             )
-            calls = mock_custom_callback.call_args_list
-            self.assertFalse(calls)
+            mock_custom_callback.assert_not_called()
 
         with self.subTest("Test parse_json with non-existed kw"):
             json_str = '{"k1": "w1 w2", "k2": "w2 w3", "k3": "w3 w4"}'
@@ -80,8 +77,7 @@ class TestParseJSON(unittest.TestCase):
                 keywords=keywords,
                 keyword_callback=mock_custom_callback,
             )
-            calls = mock_custom_callback.call_args_list
-            self.assertFalse(calls)
+            mock_custom_callback.assert_not_called()
 
         with self.subTest("Test parse_json with non-existed w"):
             json_str = '{"k1": "w1 w2", "k2": "w2 w3", "k3": "w3 w4"}'
@@ -94,8 +90,7 @@ class TestParseJSON(unittest.TestCase):
                 keywords=keywords,
                 keyword_callback=mock_custom_callback,
             )
-            calls = mock_custom_callback.call_args_list
-            self.assertFalse(calls)
+            mock_custom_callback.assert_not_called()
 
 
 if __name__ == "__main__":
