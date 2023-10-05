@@ -1,9 +1,9 @@
 **Task 1**:
 | Name                     | Stmts | Miss | Cover | Missing |
 |--------------------------|-------|------|-------|---------|
-| test_validate_message.py | 82    | 0    | 100%  |         |
+| test_validate_message.py | 97    | 0    | 100%  |         |
 | validate_message.py      | 14    | 3    | 79%   | 23-26   |
-| TOTAL                    | 96    | 3    | 97%   |         |
+| TOTAL                    | 111   | 3    | 97%   |         |
 
 **Task 2**:
 | Name                   | Stmts | Miss | Cover | Missing   |

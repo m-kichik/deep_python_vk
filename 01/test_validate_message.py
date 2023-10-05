@@ -65,6 +65,30 @@ class TestPredictMessageMood(unittest.TestCase):
             )
             self.assertEqual(result, "отл")
 
+        with self.subTest("Test bad_t = good_t with bad message"):
+            mock_model.predict.return_value = 0.2
+            message = "Strange bad message"
+            result = predict_message_mood(
+                message, mock_model, bad_thresholds=0.42, good_thresholds=0.42
+            )
+            self.assertEqual(result, "неуд")
+
+        with self.subTest("Test bad_t = good_t with norm message"):
+            mock_model.predict.return_value = 0.42
+            message = "Strange norm message"
+            result = predict_message_mood(
+                message, mock_model, bad_thresholds=0.42, good_thresholds=0.42
+            )
+            self.assertEqual(result, "норм")
+
+        with self.subTest("Test bad_t = good_t with good message"):
+            mock_model.predict.return_value = 0.6
+            message = "Strange good message"
+            result = predict_message_mood(
+                message, mock_model, bad_thresholds=0.42, good_thresholds=0.42
+            )
+            self.assertEqual(result, "отл")
+
         with self.subTest("Test value equal to lower threshold"):
             mock_model.predict.return_value = 0.3
             message = "Almost bad message"
