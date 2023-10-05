@@ -49,7 +49,8 @@ class TestKeyWordSearch(unittest.TestCase):
         I checked everything very carefully said the computer and I declare with all
         certainty that this is the Answer
         It seems to me to be absolutely honest with you that the whole point is that
-        you yourself did not know what the Question was
+        you yourself did not know what the Question
+        was
         """
 
         with self.subTest("Test presented word"):
@@ -62,6 +63,55 @@ class TestKeyWordSearch(unittest.TestCase):
                         "I checked everything very carefully said the computer and I declare with all",
                     ],
                 )
+
+        with self.subTest("Test presented word upper"):
+            with StringIO(text) as text_io:
+                result = list(search_word_in_line(text_io, ["Computer"]))
+                self.assertEqual(
+                    result,
+                    [
+                        "The computer answered 42",
+                        "I checked everything very carefully said the computer and I declare with all",
+                    ],
+                )
+
+        with self.subTest("Test presented word lower"):
+            with StringIO(text) as text_io:
+                result = list(search_word_in_line(text_io, ["forty"]))
+                self.assertEqual(
+                    result,
+                    [
+                        "Forty two screeched Lunkquool",
+                    ],
+                )
+
+        with self.subTest("Test presented words"):
+            with StringIO(text) as text_io:
+                result = list(search_word_in_line(text_io, ["computer", "million"]))
+                self.assertEqual(
+                    result,
+                    [
+                        "The computer answered 42",
+                        "And thats all you can say after seven and a half million years of work",
+                        "I checked everything very carefully said the computer and I declare with all",
+                    ],
+                )
+
+        with self.subTest("Test several words from one line"):
+            with StringIO(text) as text_io:
+                result = list(search_word_in_line(text_io, ["computer", "answered"]))
+                self.assertEqual(
+                    result,
+                    [
+                        "The computer answered 42",
+                        "I checked everything very carefully said the computer and I declare with all",
+                    ],
+                )
+
+        with self.subTest("Test word = line"):
+            with StringIO(text) as text_io:
+                result = list(search_word_in_line(text_io, ["was"]))
+                self.assertEqual(result, ["was"])
 
         with self.subTest("Test not presented word"):
             with StringIO(text) as text_io:
