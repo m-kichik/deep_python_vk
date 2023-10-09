@@ -6,8 +6,8 @@ from parse_json import parse_json, default_callback
 class TestParseJSON(unittest.TestCase):
     def test_default_callback(self):
         with patch("builtins.print") as mock_print:
-            default_callback("hello")
-            mock_print.assert_called_with("Received hello!")
+            default_callback("world", "hello")
+            mock_print.assert_called_with("Received hello in field world!")
 
     def test_parse_json(self):
         json_str = '{"k1": "w1 w2", "k2": "w2 w3", "k3": "w3 w4"}'
@@ -18,12 +18,10 @@ class TestParseJSON(unittest.TestCase):
             with patch("builtins.print") as mock_print:
                 parse_json(json_str, required_fields=required_fields, keywords=keywords)
                 calls = mock_print.call_args_list
-            self.assertEqual(
-                len([call for call in calls if call[0][0] == "Received w1!"]), 1
-            )
-            self.assertEqual(
-                len([call for call in calls if call[0][0] == "Received w2!"]), 2
-            )
+            mock_print.assert_any_call("Received w1 in field k1!")
+            mock_print.assert_any_call("Received w2 in field k1!")
+            mock_print.assert_any_call("Received w2 in field k2!")
+            self.assertEqual(len(calls), 3)
 
         with self.subTest("Test parse_json with custom callback"):
             mock_custom_callback = Mock()
@@ -34,24 +32,28 @@ class TestParseJSON(unittest.TestCase):
                 keyword_callback=mock_custom_callback,
             )
             calls = mock_custom_callback.call_args_list
-            self.assertEqual(len([call for call in calls if call[0][0] == "w1"]), 1)
-            self.assertEqual(len([call for call in calls if call[0][0] == "w2"]), 2)
+            mock_custom_callback.assert_any_call("k1", "w1")
+            mock_custom_callback.assert_any_call("k1", "w2")
+            mock_custom_callback.assert_any_call("k2", "w2")
+            self.assertEqual(len(calls), 3)
 
         with self.subTest("Test parse_json without required_fields"):
             mock_custom_callback = Mock()
-            parse_json(
-                json_str, keywords=keywords, keyword_callback=mock_custom_callback
-            )
-            mock_custom_callback.assert_not_called()
+            with self.assertRaises(ValueError):
+                parse_json(
+                    json_str, keywords=keywords, keyword_callback=mock_custom_callback
+                )
+                mock_custom_callback.assert_not_called()
 
         with self.subTest("Test parse_json without keywords"):
             mock_custom_callback = Mock()
-            parse_json(
-                json_str,
-                required_fields=required_fields,
-                keyword_callback=mock_custom_callback,
-            )
-            mock_custom_callback.assert_not_called()
+            with self.assertRaises(ValueError):
+                parse_json(
+                    json_str,
+                    required_fields=required_fields,
+                    keyword_callback=mock_custom_callback,
+                )
+                mock_custom_callback.assert_not_called()
 
         with self.subTest("Test parse_json with no matched kw-w"):
             json_str = '{"k1": "w1 w2", "k2": "w2 w3", "k3": "w3 w4"}'
@@ -91,6 +93,58 @@ class TestParseJSON(unittest.TestCase):
                 keyword_callback=mock_custom_callback,
             )
             mock_custom_callback.assert_not_called()
+
+        with self.subTest("Test parse_json with keyword 'inside' another word"):
+            json_str = '{"k1": "wordinnerword"}'
+            required_fields = ["k1"]
+            keywords = ["word", "inner"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_not_called()
+
+        with self.subTest("Test parse_json with keyword 'inside' punctuation marks"):
+            json_str = '{"k1": "word_,inner,word."}'
+            required_fields = ["k1"]
+            keywords = ["word"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_called_once_with('k1', 'word')
+
+        with self.subTest("Test parse_json with keyword in different register (upper)"):
+            json_str = '{"42": "This is the answer."}'
+            required_fields = ["42"]
+            keywords = ["Answer"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_called_once_with('42', 'answer')
+
+        with self.subTest("Test parse_json with keyword in different register (lower)"):
+            json_str = '{"42": "This is the Answer."}'
+            required_fields = ["42"]
+            keywords = ["answer"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_called_once_with('42', 'answer')
 
 
 if __name__ == "__main__":
