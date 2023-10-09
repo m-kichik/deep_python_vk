@@ -1,7 +1,4 @@
 class CustomList(list):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def __add__(self, other: list):
         result = CustomList(other[:])
         delta_len = len(self) - len(result)
