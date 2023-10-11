@@ -174,7 +174,7 @@ class TestParseJSON(unittest.TestCase):
             mock_custom_callback.assert_any_call("k1", "w2")
             mock_custom_callback.assert_any_call("k2", "w2")
 
-        with self.subTest("Test parse_json with a number of required fields for same keyword"):
+        with self.subTest("Test parse_json with a number of keyword duplicates"):
             json_str = '{"k1": "w1 w1", "k2": "w2 w3"}'
             required_fields = ["k1", "k2"]
             keywords = ["w1"]
