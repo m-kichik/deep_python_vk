@@ -24,8 +24,10 @@ class TestCountCallsMean(unittest.TestCase):
             calls = [call[0][0] for call in mock_print.call_args_list]
 
         with self.subTest("Test printed text"):
-            full_string_pattern = r"Mean time of executing last \d+ calls " +\
-                r"of [A-Za-z0-9_]+ is \d\.\d+e[+-]\d+ s."
+            full_string_pattern = (
+                r"Mean time of executing last \d+ calls "
+                + r"of [A-Za-z0-9_]+ is \d\.\d+e[+-]\d+ s."
+            )
             for call in calls:
                 self.assertTrue(re.search(full_string_pattern, call))
 
