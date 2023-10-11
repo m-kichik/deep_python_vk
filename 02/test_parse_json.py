@@ -133,19 +133,6 @@ class TestParseJSON(unittest.TestCase):
             )
             mock_custom_callback.assert_called_once_with("k1", "word")
 
-        with self.subTest("Test parse_json with keyword in different register (upper)"):
-            json_str = '{"42": "This is the answer."}'
-            required_fields = ["42"]
-            keywords = ["Answer"]
-            mock_custom_callback = Mock()
-            parse_json(
-                json_str,
-                required_fields=required_fields,
-                keywords=keywords,
-                keyword_callback=mock_custom_callback,
-            )
-            mock_custom_callback.assert_called_once_with("42", "answer")
-
         with self.subTest("Test parse_json with a number of keywords and required_fields"):
             json_str = '{"k1": "w1 w2", "k2": "w3 w4", "k3": "w1 w2"}'
             required_fields = ["k1", "k2"]
@@ -205,6 +192,19 @@ class TestParseJSON(unittest.TestCase):
             mock_custom_callback.assert_any_call("k2", "w2")
             mock_custom_callback.assert_any_call("k2", "w4")
             mock_custom_callback.assert_any_call("k2", "w5")
+
+        with self.subTest("Test parse_json with keyword in different register (upper)"):
+            json_str = '{"42": "This is the answer."}'
+            required_fields = ["42"]
+            keywords = ["Answer"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_called_once_with("42", "answer")
 
         with self.subTest("Test parse_json with keyword in different register (lower)"):
             json_str = '{"42": "This is the Answer."}'
