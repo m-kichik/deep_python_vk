@@ -146,6 +146,66 @@ class TestParseJSON(unittest.TestCase):
             )
             mock_custom_callback.assert_called_once_with("42", "answer")
 
+        with self.subTest("Test parse_json with a number of keywords and required_fields"):
+            json_str = '{"k1": "w1 w2", "k2": "w3 w4", "k3": "w1 w2"}'
+            required_fields = ["k1", "k2"]
+            keywords = ["w1", "w3"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_any_call("k1", "w1")
+            mock_custom_callback.assert_any_call("k2", "w3")
+
+        with self.subTest("Test parse_json with a number of required fields for same keyword"):
+            json_str = '{"k1": "w1 w2", "k2": "w2 w3"}'
+            required_fields = ["k1", "k2"]
+            keywords = ["w2"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_any_call("k1", "w2")
+            mock_custom_callback.assert_any_call("k2", "w2")
+
+        with self.subTest("Test parse_json with a number of required fields for same keyword"):
+            json_str = '{"k1": "w1 w1", "k2": "w2 w3"}'
+            required_fields = ["k1", "k2"]
+            keywords = ["w1"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_called_with("k1", "w1")
+            call_args = [call[0] for call in mock_custom_callback.call_args_list]
+            self.assertEqual(len(call_args), 2)
+            self.assertTrue(call_args[0] == call_args[1])
+
+        with self.subTest("Test parse_json with a number of keywords in one required_field"):
+            json_str = '{"k1": "w1 w2", "k2": "w1 w2 w3 w4 w5", "k3": "w3 w4"}'
+            required_fields = ["k2"]
+            keywords = ["w1", "w2", "w4", "w5"]
+            mock_custom_callback = Mock()
+            parse_json(
+                json_str,
+                required_fields=required_fields,
+                keywords=keywords,
+                keyword_callback=mock_custom_callback,
+            )
+            mock_custom_callback.assert_any_call("k2", "w1")
+            mock_custom_callback.assert_any_call("k2", "w2")
+            mock_custom_callback.assert_any_call("k2", "w4")
+            mock_custom_callback.assert_any_call("k2", "w5")
+
         with self.subTest("Test parse_json with keyword in different register (lower)"):
             json_str = '{"42": "This is the Answer."}'
             required_fields = ["42"]
