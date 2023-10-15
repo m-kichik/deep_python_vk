@@ -29,6 +29,9 @@ class ShipClassDescriptor:
             "Bomb Vessel",
             "Sloop",
             "Galleon",
+            "Ship of the line",
+            "Cruiser",
+            "Destroyer",
         ]
 
     def __set_name__(self, owner: Any, name: str):
