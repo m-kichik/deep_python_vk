@@ -8,6 +8,6 @@
 **Task 2**:
 | Name                     | Stmts | Miss | Cover | Missing                 |
 |--------------------------|-------|------|-------|-------------------------|
-| ship_descriptors.py      | 79    | 8    | 88%   | 133-137, 140, 148-149   |
-| test_ship_descriptors.py | 76    | 0    | 100%  |                         |
-| TOTAL                    | 155   | 8    | 95%   |                         |
+| ship_descriptors.py      | 79    | 3    | 96%   | 143, 151-152            |
+| test_ship_descriptors.py | 181   | 0    | 100%  |                         |
+| TOTAL                    | 260   | 3    | 99%   |                         |
