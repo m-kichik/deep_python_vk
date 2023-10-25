@@ -1,4 +1,5 @@
 /test.py
+/classes
 01/alice_3G.txt
 01/coverage_report.txt
 01/.coverage
@@ -10,3 +11,5 @@
 03/.coverage
 04/.coverage
 04/__pycache__
+05/.coverage
+05/__pycache__
