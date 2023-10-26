@@ -3,10 +3,7 @@ from typing import Any, Hashable
 
 class TwoWayList:
     class Node:
-        def __init__(self,
-                     value: Hashable = None,
-                     left: Any = None,
-                     right: Any = None):
+        def __init__(self, value: Hashable = None, left: Any = None, right: Any = None):
             self.value = value
             self.left = left
             self.right = right
@@ -82,10 +79,7 @@ class LRUCache:
 
     def __set_value(self, key, value):
         list_in_queue = self.__queue.add2top(key)
-        self.__items_dict[key] = {
-            "value": value,
-            "list_in_queue": list_in_queue
-            }
+        self.__items_dict[key] = {"value": value, "list_in_queue": list_in_queue}
 
     def set(self, key: Hashable, value: Any):
         if not isinstance(key, Hashable):

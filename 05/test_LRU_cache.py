@@ -52,10 +52,7 @@ class TestTwoWayList(unittest.TestCase):
         twoway_list.add2top("third")
 
         with self.subTest("Test not empty"):
-            self.assertEqual(
-                twoway_list.to_list(),
-                ["third", "second", "first"]
-                )
+            self.assertEqual(twoway_list.to_list(), ["third", "second", "first"])
 
     def test_pop_last(self):
         twoway_list = TwoWayList()
@@ -99,10 +96,7 @@ class TestTwoWayList(unittest.TestCase):
         with self.subTest("Test move from middle"):
             twoway_list.move2top(node_with_second)
 
-            self.assertEqual(
-                twoway_list.to_list(),
-                ["second", "third", "first"]
-                )
+            self.assertEqual(twoway_list.to_list(), ["second", "third", "first"])
             self.assertIs(twoway_list.head, node_with_second)
             self.assertIs(twoway_list.head.right, node_with_third)
             self.assertIs(twoway_list.tail.left, node_with_third)
@@ -111,10 +105,7 @@ class TestTwoWayList(unittest.TestCase):
         with self.subTest("Test move head"):
             twoway_list.move2top(node_with_second)
 
-            self.assertEqual(
-                twoway_list.to_list(),
-                ["second", "third", "first"]
-                )
+            self.assertEqual(twoway_list.to_list(), ["second", "third", "first"])
             self.assertIs(twoway_list.head, node_with_second)
             self.assertIs(twoway_list.tail, node_with_first)
             self.assertIs(twoway_list.head.right, node_with_third)
@@ -123,10 +114,7 @@ class TestTwoWayList(unittest.TestCase):
         with self.subTest("Test move tail"):
             twoway_list.move2top(node_with_first)
 
-            self.assertEqual(
-                twoway_list.to_list(),
-                ["first", "second", "third"]
-                )
+            self.assertEqual(twoway_list.to_list(), ["first", "second", "third"])
             self.assertIs(twoway_list.head, node_with_first)
             self.assertIs(twoway_list.tail, node_with_third)
             self.assertIs(twoway_list.head.right, node_with_second)
