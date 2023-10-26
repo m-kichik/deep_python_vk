@@ -52,7 +52,7 @@ class TwoWayList:
         self.head.left = node
         self.head = node
 
-    def to_list(self):
+    def to_list(self) -> list:
         result = []
         current = self.head
         while current:
@@ -68,7 +68,7 @@ class LRUCache:
         self.__queue = TwoWayList()
         self.__items_dict = {}
 
-    def get(self, key):
+    def get(self, key) -> Any:
         if not isinstance(key, Hashable):
             raise TypeError(f"Unhashable type: {type(key)}")
 
@@ -77,11 +77,11 @@ class LRUCache:
         self.__queue.move2top(self.__items_dict[key]["list_in_queue"])
         return self.__items_dict[key]["value"]
 
-    def __set_value(self, key, value):
+    def __set_value(self, key, value) -> None:
         list_in_queue = self.__queue.add2top(key)
         self.__items_dict[key] = {"value": value, "list_in_queue": list_in_queue}
 
-    def set(self, key: Hashable, value: Any):
+    def set(self, key: Hashable, value: Any) -> None:
         if not isinstance(key, Hashable):
             raise TypeError(f"Unhashable type: {type(key)}")
 
