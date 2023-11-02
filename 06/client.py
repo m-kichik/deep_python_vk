@@ -42,11 +42,11 @@ class Client:
             for i in range(self.n_threads)
         ]
 
-        for th in threads:
-            th.start()
+        for thread in threads:
+            thread.start()
 
-        for th in threads:
-            th.join()
+        for thread in threads:
+            thread.join()
 
 
 def main():

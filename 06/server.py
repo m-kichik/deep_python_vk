@@ -2,8 +2,9 @@ import argparse
 import json
 import multiprocessing
 import re
-import requests
 import socket
+
+import requests
 
 
 class Server:
