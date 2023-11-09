@@ -1,7 +1,7 @@
 import os
 
 import unittest
-from unittest.mock import patch
+from unittest import mock
 
 from client import Client
 
@@ -21,7 +21,7 @@ class TestClient(unittest.TestCase):
             self.assertEqual(client.n_threads, 4)
 
     def test_send_urls(self):
-        client = Client(n_threads=4)
+        client = Client(n_threads=1)
 
         with self.subTest("Test incorrect argument"):
             with self.assertRaises(ValueError):
@@ -37,18 +37,32 @@ class TestClient(unittest.TestCase):
         with open(test_file, "w") as file:
             file.write("\n".join(urls))
 
+        # with self.subTest("Test correct argument"):
+            # with mock.patch('socket.socket') as mock_socket:
+            #     mock_socket.return_value.recv.return_value = some_data
+            #     t = TCPSocket()
+            #     t.connect('example.com', 12345)  # t.sock is a mock object, not a Socket
+            # self.assertEqual(t.recv_bytes(), whatever_you_expect)
+            # t.sock.connect.assert_called_with(('example.com', 12345))
+
         with self.subTest("Test correct argument"):
-            with patch("socket.socket") as mock_socket:
+            with mock.patch("socket.socket") as mock_socket:
+                # mock_socket.return_value.recv.return_value = some_data
+                # t.sock.connect.assert_called_with(('example.com', 12345))
                 mock_sock = mock_socket.return_value
+                mock_sock.connect.return_value = None
+                mock_sock.sendall.return_value = None
                 mock_sock.recv.return_value = b"OK"
 
-                with patch("threading.Thread") as mock_thread:
-                    client.send_urls(test_file)
+                # with mock.patch("threading.Thread") as mock_thread:
+                client.send_urls(test_file)
 
-            # mock_sock.connect.assert_called_once_with(("localhost", 65001))
+            mock_socket.assert_called()
+
+            mock_sock.connect.assert_called_once_with(("localhost", 65001))
             # mock_sock.sendall.assert_called_with(b"https://google.com")
 
-            self.assertEqual(mock_thread.call_count, 4)
+            # self.assertEqual(mock_thread.call_count, 4)
 
             os.remove(test_file)
 

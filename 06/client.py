@@ -31,7 +31,7 @@ class Client:
             raise FileNotFoundError(f"No such file: {os.path.abspath(urls_file)}")
 
         with open(urls_file, "r") as file:
-            urls = file.readlines()
+            urls = file.read().splitlines()
 
         threads = [
             threading.Thread(

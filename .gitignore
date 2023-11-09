@@ -16,3 +16,6 @@
 06/.coverage
 06/__pycache__
 06/urls.txt
+07/.coverage
+07/__pycache__
+07/test_async_fetcher.py
