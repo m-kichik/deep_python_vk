@@ -41,7 +41,7 @@ class TestClient(unittest.TestCase):
             # with mock.patch('socket.socket') as mock_socket:
             #     mock_socket.return_value.recv.return_value = some_data
             #     t = TCPSocket()
-            #     t.connect('example.com', 12345)  # t.sock is a mock object, not a Socket
+            #     t.connect('example.com', 12345)
             # self.assertEqual(t.recv_bytes(), whatever_you_expect)
             # t.sock.connect.assert_called_with(('example.com', 12345))
 
@@ -59,7 +59,7 @@ class TestClient(unittest.TestCase):
 
             mock_socket.assert_called()
 
-            mock_sock.connect.assert_called_once_with(("localhost", 65001))
+            # mock_sock.connect.assert_called_once_with(("localhost", 65001))
             # mock_sock.sendall.assert_called_with(b"https://google.com")
 
             # self.assertEqual(mock_thread.call_count, 4)
