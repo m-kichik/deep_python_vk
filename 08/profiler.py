@@ -1,5 +1,6 @@
 import copy
 import inspect
+import time
 from typing import Callable
 
 from memory_profiler import memory_usage
@@ -16,11 +17,19 @@ def profile_deco(function):
 
         def __call__(self, *args, **kwargs):
             self.call_count += 1
-            result = memory_usage(
+            memory = memory_usage(
                 (self.function, copy.deepcopy(args), copy.deepcopy(kwargs))
             )
-            self.calls[self.call_count] = result
-            return self.function(*args, **kwargs)
+            start_time = time.time()
+            result = self.function(*args, **kwargs)
+            exec_time = time.time() - start_time
+
+            self.calls[self.call_count] = {
+                'memory': memory,
+                'time': exec_time,
+                }
+
+            return result
 
         def print_stat(self):
             calls = "call" if self.call_count == 1 else "calls"
@@ -30,6 +39,7 @@ def profile_deco(function):
             )
             for call_n, call_res in self.calls.items():
                 print(f"Call {call_n}:")
+                print(f"Execution time: {call_res['time']:.6f} s")
                 print(format_string.format("-" * 20, "-" * 20, "-" * 20))
                 print(format_string.format("Memory Usage", "Increment", "Line content"))
                 print(format_string.format("-" * 20, "-" * 20, "-" * 20))
@@ -37,12 +47,12 @@ def profile_deco(function):
                 for i in range(self.n_lines):
                     print(
                         format_string.format(
-                            call_res[i],
-                            call_res[i] - mem,
-                            call_res[i],
+                            call_res['memory'][i],
+                            call_res['memory'][i] - mem,
+                            call_res['memory'][i],
                         )
                     )
-                    mem += call_res[i] - mem
+                    mem += call_res['memory'][i] - mem
                 print(format_string.format("-" * 20, "-" * 20, "-" * 20))
 
     return ProfileDecoClass(function)
