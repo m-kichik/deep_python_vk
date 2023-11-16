@@ -19,9 +19,9 @@ but it works better in the attribute access task (not in the attribute change ta
 **Task 2**
 
 In this task we deal with 10.000 iterations, because memory_profiler.profile works much slower than functions to profile.
-![task2_image](08/media/cats.png)
+![task2_image](media/cats.png)
 
 **Task 3**
 
 Custom profiler based on the memory_profiler.
-![task3_image](/08/media/profiler.png)
+![task3_image](media/profiler.png)
