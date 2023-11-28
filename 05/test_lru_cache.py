@@ -1,6 +1,6 @@
 import unittest
 
-from LRU_cache import TwoWayList, LRUCache
+from lru_cache import TwoWayList, LRUCache
 
 
 class TestTwoWayList(unittest.TestCase):
@@ -122,19 +122,12 @@ class TestTwoWayList(unittest.TestCase):
 
 
 class TestLRUCache(unittest.TestCase):
-    def test_set_and_get(self):
+    def test_set(self):
         cache = LRUCache(4)
 
         with self.subTest("Test set incorrect key"):
             with self.assertRaises(TypeError):
                 cache.set(["k1"], 1)
-
-        with self.subTest("Test get incorrect key"):
-            with self.assertRaises(TypeError):
-                cache.get(["k1"])
-
-        with self.subTest("Test get from empty cache"):
-            self.assertIsNone(cache.get("k1"))
 
         with self.subTest("Test set and get correct key"):
             cache.set("k1", 1)
@@ -143,9 +136,6 @@ class TestLRUCache(unittest.TestCase):
         with self.subTest("Test set new value"):
             cache.set("k1", 11)
             self.assertEqual(cache.get("k1"), 11)
-
-        with self.subTest("Test get with non-existed key"):
-            self.assertIsNone(cache.get(42))
 
         with self.subTest("Test set multiple items"):
             cache.set("k2", 2)
@@ -162,21 +152,72 @@ class TestLRUCache(unittest.TestCase):
             self.assertEqual(cache.get("k5"), 5)
             self.assertIsNone(cache.get("k1"))
 
-        with self.subTest("Test 'get' moves to top"):
-            self.assertEqual(cache.get("k2"), 2)  # ['k2', 'k5', 'k4', 'k3']
-
+        with self.subTest("Test 'set' new value moves to top"):
+            cache.set("k2", 22)  # ['k2', 'k5', 'k4', 'k3']
             cache.set("k6", 6)  # ['k6', 'k2', 'k5', 'k4']
 
+            self.assertIsNone(cache.get("k3"))
+            self.assertEqual(cache.get("k2"), 22)
             self.assertEqual(cache.get("k6"), 6)
-            self.assertEqual(cache.get("k3"), None)
+            self.assertEqual(cache.get("k4"), 4)
 
-        with self.subTest("Test 'set' new value moves to top"):
-            cache.set("k4", 44)  # ['k4', 'k6', 'k2', 'k5']
-            cache.set("k7", 7)  # ['k7', 'k4', 'k6', 'k2']
+    def test_get(self):
+        cache = LRUCache(4)
 
-            self.assertIsNone(cache.get("k5"))
-            self.assertEqual(cache.get("k4"), 44)
-            self.assertEqual(cache.get("k7"), 7)
+        with self.subTest("Test get incorrect key"):
+            with self.assertRaises(TypeError):
+                cache.get(["k1"])
+
+        with self.subTest("Test get from empty cache"):
+            self.assertIsNone(cache.get("k1"))
+
+        cache.set("k1", 1)
+        cache.set("k2", 2)
+        cache.set("k3", 3)
+        cache.set("k4", 4)
+
+        with self.subTest("Test get with non-existed key"):
+            self.assertIsNone(cache.get("k42"))
+
+        with self.subTest("Test 'get' with correct key"):
+            self.assertEqual(cache.get("k4"), 4)
+
+        with self.subTest("Test 'get' moves to top"):
+            self.assertEqual(cache.get("k1"), 1)  # ['k1', 'k4', 'k3', 'k2']
+
+            cache.set("k5", 5)  # ['k5', 'k1', 'k4', 'k3']
+
+            self.assertEqual(cache.get("k5"), 5)
+            self.assertEqual(cache.get("k2"), None)
+            self.assertEqual(cache.get("k3"), 3)
+
+    def test_one_element(self):
+        cache = LRUCache(1)
+
+        with self.subTest("Test set and get correct key"):
+            cache.set("k1", 1)
+            self.assertEqual(cache.get("k1"), 1)
+
+        with self.subTest("Test set new key"):
+            cache.set("k2", 2)
+            self.assertIsNone(cache.get("k1"))
+            self.assertEqual(cache.get("k2"), 2)
+
+    def test_ordinary_usage(self):
+        cache = LRUCache(2)
+
+        cache.set("k1", "val1")
+        cache.set("k2", "val2")
+
+        self.assertIsNone(cache.get("k3"))
+        self.assertEqual(cache.get("k2"), "val2")
+        self.assertEqual(cache.get("k1"), "val1")
+
+        cache.set("k3", "val3")
+
+        self.assertEqual(cache.get("k3"), "val3")
+        self.assertIsNone(cache.get("k2"))
+        self.assertEqual(cache.get("k1"), "val1")
 
 
 if __name__ == "__main__":
