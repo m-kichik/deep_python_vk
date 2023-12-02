@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 import logging
 from typing import Any, Hashable
 
-from custom_formatter import CustomFormatter
+from custom_log_tools import CustomFormatter, CustomFilter
 
 
 class TwoWayList:
@@ -138,8 +138,7 @@ def main():
     handlers = [logging.FileHandler("cache.log", mode="w")]
     if args.s:
         stream_handler = logging.StreamHandler()
-        if args.f:
-            stream_handler.setFormatter(CustomFormatter())
+        stream_handler.setFormatter(CustomFormatter())
         handlers.append(stream_handler)
 
     logging.basicConfig(
@@ -148,7 +147,11 @@ def main():
         handlers=handlers,
     )
 
-    cache = LRUCache(logging.getLogger("lru_logger"), limit=2)
+    logger = logging.getLogger("lru_logger")
+    if args.f:
+        logger.addFilter(CustomFilter())
+
+    cache = LRUCache(logger, limit=2)
 
     cache.set("k1", "val1")
     cache.set("k2", "val2")

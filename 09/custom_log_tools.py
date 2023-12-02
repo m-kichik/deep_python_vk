@@ -23,3 +23,9 @@ class CustomFormatter(logging.Formatter):
         )
 
         return formatted_message
+
+
+class CustomFilter(logging.Filter):
+    def filter(self, record):
+        log_message = record.msg
+        return len(log_message.split()) >= 5

@@ -1,12 +1,7 @@
-2023-11-22 19:01:11,950	INFO	lru_logger	Created LRUCache with capacity of 2 items
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Set key k1 with value val1
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Set key k2 with value val2
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Сapacity limit of 2 items reached
-2023-11-22 19:01:11,950	WARNING	lru_logger	Accessing a non-existent key
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Access key k2
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Access key k1
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Set key k3 with value val3, removed key k2 with value val2
-2023-11-22 19:01:11,950	DEBUG	lru_logger	Access key k3
-2023-11-22 19:01:11,950	WARNING	lru_logger	Accessing a non-existent key
-2023-11-22 19:01:11,950	ERROR	lru_logger	Attempt to call set with unhashable type: <class 'list'>
-2023-11-22 19:01:11,950	ERROR	lru_logger	Attempt to call get with unhashable type: <class 'list'>
+2023-12-02 13:46:18,709	INFO	lru_logger	Created LRUCache with capacity of 2 items
+2023-12-02 13:46:18,709	DEBUG	lru_logger	Set key k1 with value val1
+2023-12-02 13:46:18,709	DEBUG	lru_logger	Set key k2 with value val2
+2023-12-02 13:46:18,709	DEBUG	lru_logger	Сapacity limit of 2 items reached
+2023-12-02 13:46:18,709	DEBUG	lru_logger	Set key k3 with value val3, removed key k2 with value val2
+2023-12-02 13:46:18,709	ERROR	lru_logger	Attempt to call set with unhashable type: <class 'list'>
+2023-12-02 13:46:18,709	ERROR	lru_logger	Attempt to call get with unhashable type: <class 'list'>
