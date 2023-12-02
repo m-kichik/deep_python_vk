@@ -18,10 +18,10 @@ but it work better in the attribute access task (not in the attribute change tas
 
 **Task 2**
 
-In this task we deal with 10.000 iterations, because memory_profiler.profile works much slower than functions to profile.
+In this task we deal with 10.000 iterations, because memory_profiler.profile works much slower than functions to profile. As it was expected, ''slot'' and ''weak'' classes consume less memory at the time of creation. 
 ![task2_image](media/cats.png)
 
 **Task 3**
 
-Custom profiler based on the memory_profiler.
+Custom profiler based on the cProfiler.
 ![task3_image](media/profiler.png)
