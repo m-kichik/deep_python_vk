@@ -34,6 +34,7 @@ class WeakCat:
         self.answer = weakref.ref(answer)
 
 
+@profile
 def compare_creation_from_existed(n_instances: int = 10_000_000):
     mice = [Mouse("average_mouce"), Mouse("average_mouce"), Mouse("ran_away_mouce")]
     answers = [lambda: "mew", lambda: "mrr", lambda: "mau"]
@@ -57,6 +58,7 @@ def compare_creation_from_existed(n_instances: int = 10_000_000):
     del weaks
 
 
+@profile
 def compare_creation_with_new(n_instances: int = 10_000_000):
     start_time = time.time()
     normals = [
@@ -67,9 +69,7 @@ def compare_creation_with_new(n_instances: int = 10_000_000):
     del normals
 
     start_time = time.time()
-    slots = [
-        SlotCat(Mouse("average_mouce"), lambda: "mrr") for _ in range(n_instances)
-    ]
+    slots = [SlotCat(Mouse("average_mouce"), lambda: "mrr") for _ in range(n_instances)]
     slot_time = time.time() - start_time
     print(f"slot:   {slot_time:.6f} s")
     del slots
@@ -149,19 +149,9 @@ def study_time(n: int = 10_000_000):
     compare_change_mouse_name(n)
 
 
-@profile
-def study_memory(n_instances: int = 10_000_000):
-    normals = [NormalCat(Mouse("small_mouce"), lambda: "mew") for _ in range(n_instances)]
-
-    slots = [SlotCat(Mouse("average_mouce"), lambda: "mrr") for _ in range(n_instances)]
-
-    weaks = [WeakCat(Mouse("ran_away_mouce"), lambda: "mau") for _ in range(n_instances)]
-
-
 def main():
     n = 100_000
     study_time(n)
-    study_memory(n)
 
 
 if __name__ == "__main__":
