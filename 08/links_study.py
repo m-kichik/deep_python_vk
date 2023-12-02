@@ -3,6 +3,7 @@ from typing import Callable
 import weakref
 
 import random
+
 random.seed(42)
 
 from memory_profiler import profile
@@ -59,7 +60,7 @@ def compare_creation_from_existed(n_instances: int = 10_000_000):
 def compare_creation_with_new(n_instances: int = 10_000_000):
     start_time = time.time()
     normals = [
-        NormalCat(Mouse("small_____mouce"), lambda: "mew") for _ in range(n_instances)
+        NormalCat(Mouse("small_mouce"), lambda: "mew") for _ in range(n_instances)
     ]
     normal_time = time.time() - start_time
     print(f"normal: {normal_time:.6f} s")
@@ -67,7 +68,7 @@ def compare_creation_with_new(n_instances: int = 10_000_000):
 
     start_time = time.time()
     slots = [
-        SlotCat(Mouse("average__mouce"), lambda: "mrr") for _ in range(n_instances)
+        SlotCat(Mouse("average_mouce"), lambda: "mrr") for _ in range(n_instances)
     ]
     slot_time = time.time() - start_time
     print(f"slot:   {slot_time:.6f} s")
@@ -134,8 +135,7 @@ def compare_change_mouse_name(n_iterations: int = 10_000_000):
     print(f"weak:   {weak_time:.6f} s")
 
 
-@profile
-def study_links(n: int = 10_000_000):
+def study_time(n: int = 10_000_000):
     print(f"Creation time for {n} instances with existed args")
     compare_creation_from_existed(n)
     print()
@@ -149,9 +149,19 @@ def study_links(n: int = 10_000_000):
     compare_change_mouse_name(n)
 
 
+@profile
+def study_memory(n_instances: int = 10_000_000):
+    normals = [NormalCat(Mouse("small_mouce"), lambda: "mew") for _ in range(n_instances)]
+
+    slots = [SlotCat(Mouse("average_mouce"), lambda: "mrr") for _ in range(n_instances)]
+
+    weaks = [WeakCat(Mouse("ran_away_mouce"), lambda: "mau") for _ in range(n_instances)]
+
+
 def main():
-    n = 10_000_000
-    study_links(n)
+    n = 100_000
+    study_time(n)
+    study_memory(n)
 
 
 if __name__ == "__main__":
