@@ -53,7 +53,7 @@ class TestAsyncFetcher(unittest.IsolatedAsyncioTestCase):
         except asyncio.exceptions.CancelledError:
             pass
 
-        self.assertEqual(mock_fetch_url.mock_calls, [call(url)])
+        mock_fetch_url.assert_called_once_with(url)
         self.assertEqual(await output_queue.get(), 200)
 
     @patch("builtins.print")
@@ -72,7 +72,7 @@ class TestAsyncFetcher(unittest.IsolatedAsyncioTestCase):
         except asyncio.exceptions.CancelledError:
             pass
 
-        self.assertEqual(mock_print.mock_calls, [call(200)])
+        mock_print.assert_called_once_with(200)
 
     @patch("aiohttp.ClientSession.get")
     @patch("builtins.print")
@@ -81,15 +81,10 @@ class TestAsyncFetcher(unittest.IsolatedAsyncioTestCase):
         async_fetcher = AsyncFetcher(42)
         await async_fetcher.batch_fetch(self.test_file)
 
-        self.assertIn(
-            call("https://google.com", timeout=3), mock_session_get.mock_calls
-        )
-        self.assertIn(
-            call("https://vk.company", timeout=3), mock_session_get.mock_calls
-        )
-        self.assertIn(
-            call("https://home.vk.team", timeout=3), mock_session_get.mock_calls
-        )
+        mock_session_get.assert_any_call("https://google.com", timeout=3)
+        mock_session_get.assert_any_call("https://vk.company", timeout=3)
+        mock_session_get.assert_any_call("https://home.vk.team", timeout=3)
+
         self.assertEqual([call(200), call(200), call(200)], mock_print.mock_calls)
 
 
