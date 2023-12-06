@@ -6,40 +6,51 @@ import aiohttp
 
 
 class AsyncFetcher:
+    def __init__(self, num_workers: int = 4):
+        self.num_workers = num_workers
+
     async def fetch_url(self, url: str) -> str:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, timeout=3) as resp:
-                return resp.status
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, timeout=3) as resp:
+                    return resp.status
+        except Exception as err:
+            print(f"{err} occured in fetch_url")
+            return 418
 
     async def producer(self, input: Any, output: Any) -> None:
         while True:
-            url = await input.get()
             try:
-                await output.put(await self.fetch_url(url))
-            finally:
-                input.task_done()
+                url = await input.get()
+                try:
+                    await output.put(await self.fetch_url(url))
+                finally:
+                    input.task_done()
+            except Exception as err:
+                print(f"{err} occured, continue work")
 
     async def consumer(self, input: Any) -> None:
         while True:
-            result = await input.get()
+            try:
+                result = await input.get()
+                print(result)
+                input.task_done()
+            except Exception as err:
+                print(f"{err} occured in consumer, continue working")
 
-            print(result)
-            input.task_done()
-
-    async def batch_fetch(self, urls_file: str, num_workers: int = 4) -> None:
-        with open(urls_file, "r") as file:
-            urls = file.read().splitlines()
-
+    async def batch_fetch(self, urls_file: str) -> None:
         url_queue = asyncio.Queue()
         status_queue = asyncio.Queue()
 
         workers = [
             asyncio.create_task(self.producer(url_queue, status_queue))
-            for _ in range(num_workers)
+            for _ in range(self.num_workers)
         ]
         workers.append(asyncio.create_task(self.consumer(status_queue)))
-        for url in urls:
-            await url_queue.put(url)
+        with open(urls_file, "r") as file:
+            while url := file.readline():
+                url = url.strip()
+                await url_queue.put(url)
 
         await url_queue.join()
         await status_queue.join()
@@ -55,8 +66,8 @@ async def main():
     args = parser.parse_args()
     n_workers, filename = args.c, args.urls
 
-    fetcher = AsyncFetcher()
-    await fetcher.batch_fetch(filename, n_workers)
+    fetcher = AsyncFetcher(n_workers)
+    await fetcher.batch_fetch(filename)
 
 
 if __name__ == "__main__":
