@@ -19,7 +19,7 @@ class TestCJSON(unittest.TestCase):
 
         with self.subTest("Test incorrect value"):
             with self.assertRaises(ValueError):
-                cjson.loads("{42: 42.0}")
+                cjson.loads('{"42": 42.0}')
 
         with self.subTest("Test string key and string value"):
             self.assertEqual(cjson.loads('{"x": "y"}'), {"x": "y"})
@@ -36,11 +36,11 @@ class TestCJSON(unittest.TestCase):
     def test_dumps(self):
         with self.subTest("Test incorrect key"):
             with self.assertRaises(TypeError):
-                cjson.loads({42: 42})
+                cjson.dumps({42: 42})
 
         with self.subTest("Test incorrect value"):
             with self.assertRaises(TypeError):
-                cjson.loads({42: 42.0})
+                cjson.dumps({"42": 42.0})
 
         with self.subTest("Test empty dict"):
             self.assertEqual(cjson.dumps({}), "{}")
